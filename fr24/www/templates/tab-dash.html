@@ -5,7 +5,8 @@
       <div class="item item-divider">{{flight.fltno}}</div>
       <div class="item item-body">
         <div>
-          {{flight.departure_name}}->{{flight.destination_name}}
+          <a href="{{flight.departure_name|iata_href}}" >{{flight.departure_name|iata_cnname}}</a>
+          -><a href="{{flight.destination_name|iata_href}}">{{flight.destination_name|iata_cnname}}</a>
         </div>
       </div>
     </div>

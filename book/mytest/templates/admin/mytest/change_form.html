@@ -1,5 +1,10 @@
 {% extends "admin/base_site.html" %}
+{% block title %}我的管理平台{% endblock %}
+{% block branding %}
+<h1 id="site-name"><a href="{% url 'admin:index' %}">测试管理平台</a></h1>
+{% endblock %}
 {% load i18n admin_urls admin_static admin_modify %}
+
 
 {% block extrahead %}{{ block.super }}
 <script type="text/javascript" src="{% url 'admin:jsi18n' %}"></script>
@@ -92,5 +97,5 @@
 
 </div>
 </form></div>
-9999999999999999999
+0000000000000
 {% endblock %}

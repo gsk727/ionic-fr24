@@ -1,5 +1,7 @@
 angular.module('starter.services', ['ngResource', "ngCookies"])
 .factory("FR24", function($resource, $http, $cookies) {
+  
+  
   var bounds_up = "55.229023057406344,33.00228416652958,73.13484375000098,136.7578125";
   var bounds_down = "35.56798045801209,19.660503625269282,86.74277343749918,123.7939453125";
   var fr24_url = "http://bma.data.fr24.com/zones/fcgi/feed.js?bounds={bound}&faa=1&mlat=1&flarm=1&adsb=1&gnd=1&air=1&vehicles=1&estimated=1&maxage=900&gliders=1&stats=1&";

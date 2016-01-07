@@ -8,10 +8,11 @@
 angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', "ngCookies"])
 
 .run(function($ionicPlatform, $http, $cookies, FR24) {
-  console.info( $cookies.csrftoken);
+  console.info("run:"+ $cookies.csrftoken);
+  
   $http.get("http://localhost:8000/api/csrf", {}).success(function() {
     $http.defaults.headers.post['X-CSRFToken'] = $cookies.get("csrftoken");
-    
+    console.info("get csrf:"+$cookies.get("csrftoken"));
     FR24.bcsrf = true;
   });
   
@@ -29,6 +30,23 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', "
       StatusBar.styleDefault();
     }
   });
+})
+.filter('iata_cnname',function(){
+    return function(iata){
+        var _iata = iata.replace("XIY", "SIY")
+        if(g_iata[_iata])
+            return g_iata[_iata]["name"];
+        else
+            return iata;
+    }   
+}).filter("iata_href", function() {
+    return function(iata){
+        var _iata = iata.replace("XIY", "SIY")
+        if(g_iata[_iata])
+            return g_iata[_iata]["href"];
+        else
+            return "";
+    }   
 })
 
 .config(function($stateProvider, $urlRouterProvider, $httpProvider) {

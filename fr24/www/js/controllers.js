@@ -1,16 +1,22 @@
 
 angular.module('starter.controllers', ["ngCookies"])
 
-.controller('DashCtrl', function($scope, FR24, $cookies,$rootScope) {
+.controller('DashCtrl', function($scope, FR24, $cookies,$rootScope, $timeout) {
   
   //$scope.flights = [];
   console.info($cookies.getAll());
-  
-  
-  FR24.data(function(data) {
-    console.info(data);
-    $rootScope.flights = data;
-  });
+  $timeout(function() {
+      if(FR24.bcsrf) {
+          FR24.data(function(data) {
+            console.info(data);
+            if(data instanceof Array) {
+                //$rootScope.flights = data.splice(0, 100);
+                $rootScope.flights = data;
+
+            }
+          });
+      }
+  }, 1000);
   
 })
 
@@ -24,10 +30,11 @@ angular.module('starter.controllers', ["ngCookies"])
   //});
   
   var map = new $window.BMap.Map("container");          // 创建地图实例  
+  map.enableScrollWheelZoom(true);
   var point = new $window.BMap.Point(116.404, 39.915);  // 创建点坐标  
- // map.centerAndZoom(point, 15);                // 初始化地图，设置中心点坐标和地图级别  
-    
-    
+  map.centerAndZoom(point, 15);                // 初始化地图，设置中心点坐标和地图级别  
+  
+  var myGeo = new BMap.Geocoder(); 
   for (var index in $rootScope.flights) {
     var f = $rootScope.flights[index];
     
@@ -36,13 +43,29 @@ angular.module('starter.controllers', ["ngCookies"])
       console.info(f);
       console.info(result);
       }
-    var point = new BMap.Point(result.lng,result.lat);
-    //map.centerAndZoom(point, 12);
-    var marker = new BMap.Marker(point);  // 创建标注
-    map.addOverlay(marker);              // 将标注添加到地图中
+      
+    myGeo.getLocation(new BMap.Point(result.lng,result.lat), function(result, _f){
+        var _f = _f;
+        var result = result;
+        return function(_result) { 
+            if (_result){
+                console.info(_result.address);
+                if(_result.address.length==0)
+                    return;
+                var point = new BMap.Point(result.lng,result.lat);
+                //map.centerAndZoom(point, 12);
+                console.info(_result);
+                console.info(_f);
+                var marker = new BMap.Marker(point);  // 创建标注
+                map.addOverlay(marker);              // 将标注添加到地图中
+                
+                var label = new BMap.Label(_f.fltno,{offset:new BMap.Size(20,-10)});
+                marker.setLabel(label)
+            }
+        }
+    }(result, f));
     
-    var label = new BMap.Label(f.fltno,{offset:new BMap.Size(20,-10)});
-    marker.setLabel(label)
+    
   }
   
   $scope.chats = Chats.all();

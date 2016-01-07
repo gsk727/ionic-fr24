@@ -40,6 +40,7 @@ def get_fr24_json():
                 return
             flight_list.update(r.json())
             print "start request"
+            """
             r = requests.get("http://bma.data.fr24.com/zones/fcgi/feed.js?bounds=" + \
                 bounds2+"&faa=1&mlat=1&flarm=1&adsb=1&gnd=1&air=1&vehicles=1&estimated=1&maxage=900&gliders=1&stats=1&",
                 headers = headers,
@@ -49,7 +50,9 @@ def get_fr24_json():
             if r.status_code != 200:
                 return
             flight_list.update(r.json())
+            """
             break
+            
         except:
             count += 1
             traceback.print_exc()
