@@ -97,6 +97,15 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', "
       }
     })
 
+  .state("tab.detail", {
+    url: '/detail/:pos',
+    views: {
+      'tab-detail': {
+        templateUrl: 'templates/tab-pos.html',
+        controller: 'PosDetailCtrl'
+      }
+    }
+  })
   .state('tab.account', {
     url: '/account',
     views: {

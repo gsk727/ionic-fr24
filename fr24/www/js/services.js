@@ -20,8 +20,9 @@ angular.module('starter.services', ['ngResource', "ngCookies"])
       'lng': z * Math.cos(t) + 0.0065
       }
     },
+    
     bcrsf:false,
-    data:function(callback) {
+    data:function(callback, params) {
       console.info(this.bcrsf+"lllll");
       if(!this.bcrsf) {
         callback();
@@ -45,7 +46,7 @@ angular.module('starter.services', ['ngResource', "ngCookies"])
         callback(flights);
       };
       
-      var data = {};
+      //var data = {};
       
       // $resource(fr24_url.replace("{bound}",bounds_up),
         // {},
@@ -59,9 +60,10 @@ angular.module('starter.services', ['ngResource', "ngCookies"])
       // .data(_callback1);
       //$resource(fr24_url.replace("{bound}",bounds_down), {}).get(_callback2);
       //$http.defaults.headers.post['X-CSRFToken'] = $cookies.get("csrftoken");
-      console.info($cookies.get("csrftoken")+"555555555555");
-      console.info("asdsadasD");
-      $resource("http://localhost:8000/api/data", {}, {"data":{method:"POST", isArray:true}}).data(callback);
+      //console.info($cookies.get("csrftoken")+"555555555555");
+      //console.info("asdsadasD");
+      $resource("http://localhost:8000/api/data", params||{}, {"data":{method:"POST", isArray:true}}
+      ).data(callback);
     }
     
   }

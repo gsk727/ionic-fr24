@@ -9,9 +9,11 @@ import datetime
 import traceback
 import json
 import re
+from django.core.cache import cache
 
 
-def get_fr24_json():
+def get_fr24_json(bounds  = None):
+    print bounds
     # 连续获取失败2次则退出这次抓取
     #bounds1 = "53.08125433692244,9.602020446479761,88.0748085937521,-168.310546875"
     bounds1 = "55.229023057406344,33.00228416652958,73.13484375000098,136.7578125"
@@ -29,6 +31,8 @@ def get_fr24_json():
     flight_list = {}
     while count < 2:
         try:
+            if bounds:
+                bounds1 = bounds
             print "start request"
             r = requests.get("http://bma.data.fr24.com/zones/fcgi/feed.js?bounds=" + \
                 bounds1+"&faa=1&mlat=1&flarm=1&adsb=1&gnd=1&air=1&vehicles=1&estimated=1&maxage=900&gliders=1&stats=1&",
@@ -120,6 +124,10 @@ def get_fr24_json():
             #    fl_info["plan_launch"] =  cur_date.strftime("%Y-%m-%d") + " " + plan_flight_info.get("plan_launch", "")
                 
             cur_flights.append(fl_info)
+            
+            
+    cache.set(bounds, cur_flights, 60*15)
+    print len(cur_flights)
     
     return cur_flights
                 
@@ -131,7 +139,8 @@ def api_csrf(request):
 def api_data(request):
     if request.method == "POST":
         form = MyForm(request.POST)
-        data = get_fr24_json()
+        
+        data = get_fr24_json(request.GET.get("bounds"))
         return HttpResponse(json.dumps(data), content_type="application/json")
         
         #return render(request, "mytest.html", {"form":form})
