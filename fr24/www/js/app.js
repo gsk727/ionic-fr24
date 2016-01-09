@@ -18,6 +18,24 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', "
   
  
   $ionicPlatform.ready(function() {
+  
+  
+    var onReceiveMessage = function(event){
+      try{
+      
+        var message
+        if(device.platform == "Android"){
+           message = window.plugins.jPushPlugin.receiveMessage.message;
+        }else{
+             message   = event.content;
+        }
+         //var extras = window.plugins.jPushPlugin.extras
+        alert(message);
+      } catch(exception){
+          console.log("JPushPlugin:onReceiveMessage-->"+exception);
+      }
+    }
+            
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
     if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
@@ -28,6 +46,9 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', "
     if (window.StatusBar) {
       // org.apache.cordova.statusbar required
       StatusBar.styleDefault();
+    }
+    if(window.plugins.jPushPlugin) {
+      window.plugins.jPushPlugin.init();
     }
   });
 })
