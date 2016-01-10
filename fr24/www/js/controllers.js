@@ -22,25 +22,36 @@ angular.module('starter.controllers', ["ngCookies"])
   
 })
 
-.controller("PosDetailCtrl", function($scope, Chats, $window, $stateParams) {
-  console.info("posdetail");
-  var point_slug  = $stateParams.pos.split("_");
+.controller("PosDetailCtrl", function($scope, Chats, $window, $stateParams, $window) {
+  
+  var point_slug  = $stateParams.pos.split(",");
   console.info(point_slug);
-  var point =new BMap.Point(parseFloat(point_slug[0]), parseFloat(point_slug[1]));    
+  var point =new AMap.LngLat(parseFloat(point_slug[0]), parseFloat(point_slug[1]));    
   //map.centerAndZoom(new BMap.Point(116.404, 39.915), 11);      
   // 创建地理编码实例      
-  var myGeo = new BMap.Geocoder();      
+     
   // 根据坐标得到地址描述 
-  myGeo.getLocation(point, function(result){   
-    console.info(result);
-    if (result) {
-      
-      
-      $scope.$apply(function() {$scope.location_info =result;$scope.pos_address = result.address});  
+  console.info("posdetail");
+  var marker = new AMap.Marker({
+      map:$scope.map,
+      bubble:true
+  })
+ 
+  console.info($window.myGeo);
+  
+  marker.setPosition(point);
+  
+  $window.myGeo && $window.myGeo.getAddress(point,function(status,result){
+    if(status=='complete'){
+      console.info(result);
+      $scope.$apply(function() {
+        $scope.pos_address  = result.regeocode.formattedAddress;
+        $scope.location_info = result.regeocode.addressComponent;
+      });
+    }else{
+       //message.innerHTML = '无法获取地址'
     }
   });
-  
-  
 })
 .controller('ChatsCtrl', function($scope, Chats, $window, FR24, $rootScope, $state) {
   // With the new view caching in Ionic, Controllers are only called
@@ -102,18 +113,22 @@ angular.module('starter.controllers', ["ngCookies"])
       // error
     });
   */
-  window.baiduLocation &&
-  window.baiduLocation.getCurrentPosition(function(result){
+  window.amapLocation &&
+  window.amapLocation.getCurrentPosition(function(result){
     console.info("sucess"+result.coords.latitude);
-    var point = new BMap.Point(result.coords.longitude,result.coords.latitude);
-    $scope.map.centerAndZoom(point, 12);
+    var point = new AMap.LngLat(result.longitude,result.latitude);
+    $scope.map.setCenter(point);
+    var marker = new AMap.Marker({
+      map:$scope.map,
+      bubble:true
+    })
     //console.info(_result);
     //console.info(_f);
-    var marker = new BMap.Marker(point);  // 创建标注
-    $scope.map.addOverlay(marker);              // 将标注添加到地图中
-    
-    var label = new BMap.Label("当前位置",{offset:new BMap.Size(20,-10)});
-    marker.setLabel(label);
+    //var marker = new BMap.Marker(point);  // 创建标注
+    //$scope.map.(marker);              // 将标注添加到地图中
+    marker.setPosition(point);
+    //var label = new BMap.Label("当前位置",{offset:new BMap.Size(20,-10)});
+    //marker.setLabel(label);
     
     alert(result+"success");
   }, function(error){
@@ -121,11 +136,12 @@ angular.module('starter.controllers', ["ngCookies"])
     alert("error"+error);
   } );
   
-  $scope.map = new $window.BMap.Map("container", {"enableMapClick":true});          // 创建地图实例  
-  $scope.map.enableScrollWheelZoom(true);
-  var point = new $window.BMap.Point(116.404, 39.915);  // 创建点坐标  
-  $scope.map.centerAndZoom(point, 15);                // 初始化地图，设置中心点坐标和地图级别  
-  $scope.map.addEventListener("zoomend", function() {
+  $scope.map = new $window.AMap.Map("container");          // 创建地图实例  
+  //$scope.map.enableScrollWheelZoom(true);
+  var point = new $window.AMap.LngLat(116.404, 39.915);  // 创建点坐标  
+  $scope.map.setZoom(15);                // 初始化地图，设置中心点坐标和地图级别  
+  $scope.map.setCenter(point);
+  AMap.event.addListener($scope.map, "zoomend", function() {
     console.info($scope.map.getBounds());
     var _b = $scope.map.getBounds();
     FR24.data(function(data) {
@@ -137,11 +153,12 @@ angular.module('starter.controllers', ["ngCookies"])
     }, {"bounds":_b.ul.lat+","+_b.Ll.lat+","+_b.ul.lng+","+_b.ul.lng});
   });
   
-  $scope.map.addEventListener("click", function(e) {
+  AMap.event.addListener($scope.map, "click", function(e) {
     console.info(e);
     console.info(e.overlay);
+    
     //if(e.overlay) {
-    $state.go("tab.detail", {"pos":e.point.lng+"_"+e.point.lat});
+    $state.go("tab.detail", {"pos":e.lnglat.toString()});
     //}
     
     
@@ -203,7 +220,14 @@ angular.module('starter.controllers', ["ngCookies"])
   
   //bounds.
   
-  var myGeo = new BMap.Geocoder();
+  AMap.service('AMap.Geocoder',function(){//回调函数
+    //实例化Geocoder
+    $window.myGeo = myGeo  = new AMap.Geocoder({
+    //city: "010"//城市，默认：“全国”
+    });
+    //TODO: 使用geocoder 对象完成相关功能
+  })
+  //var myGeo = new AMap.Geocoder();
   
   $scope.translateCallback = function(_f) {
       var _f = _f;

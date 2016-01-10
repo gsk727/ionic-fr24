@@ -2,7 +2,10 @@
   <ion-content>
     <ion-list>
     <div>
-      {{location_info.business}}
+      <span ng-repeat="a in  location_info.businessAreas">
+        {{a.name}}
+      </span>
+      
     </div>
     </ion-list>
   </ion-content>
