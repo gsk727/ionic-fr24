@@ -140,9 +140,9 @@ angular.module('starter.controllers', ["ngCookies"])
   $scope.map.addEventListener("click", function(e) {
     console.info(e);
     console.info(e.overlay);
-    if(e.overlay) {
-      $state.go("tab.detail", {"pos":e.point.lng+"_"+e.point.lat});
-    }
+    //if(e.overlay) {
+    $state.go("tab.detail", {"pos":e.point.lng+"_"+e.point.lat});
+    //}
     
     
     

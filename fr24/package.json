@@ -19,7 +19,8 @@
     {
       "locator": "https://github.com/doabit/baidulocation-phonegap-plugin",
       "id": "com.doabit.phonegap.plugins.baidulocation"
-    }
+    },
+    "cordova-plugin-file-transfer"
   ],
   "cordovaPlatforms": [
     "android"

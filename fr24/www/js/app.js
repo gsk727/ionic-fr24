@@ -49,6 +49,13 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', "
     }
     if(window.plugins.jPushPlugin) {
       window.plugins.jPushPlugin.init();
+      window.plugins.jPushPlugin.setDebugMode(true);
+      //document.addEventListener("jpush.setTagsWithAlias", onTagsWithAlias, false);
+      //document.addEventListener("deviceready", onDeviceReady, false); 
+      //document.addEventListener("jpush.openNotification", onOpenNotification, false);
+      //document.addEventListener("jpush.receiveNotification", onReceiveNotification, false);
+      document.addEventListener("jpush.receiveMessage", onReceiveMessage, false);
+
     }
   });
 })
