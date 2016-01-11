@@ -17,9 +17,12 @@ import android.location.Location;
 import android.os.SystemClock;
 import android.util.Log;
 
-import com.amap.api.location.LocationManagerProxy;
+
+
+import com.amap.api.location.AMapLocationClient;
+import com.amap.api.location.AMapLocationClientOption;
+import com.amap.api.location.AMapLocationClientOption.AMapLocationMode;
 import com.amap.api.location.AMapLocationListener;
-import com.amap.api.location.LocationProviderProxy;
 
 public class AMapLocation extends CordovaPlugin {
     private static final String TAG = "AMapLocation";
@@ -28,22 +31,46 @@ public class AMapLocation extends CordovaPlugin {
     private static final String STOP_ACTION = "stop";
     private static final String READ_ACCTION = "read";
     private static final int INTERVAL = 60 * 60;
-
+    
+    private AMapLocationClient locationClient = null;
+	private AMapLocationClientOption locationOption = null;
+    
     private int interval = INTERVAL;
     @Override
     public boolean execute(String action, JSONArray args,
-            final CallbackContext callbackContext) {
+            final CallbackContext callbackContext) throws JSONException {
         if (GET_ACTION.equals(action)) {
-            LocationManagerProxy mLocationManagerProxy = LocationManagerProxy.getInstance(cordova.getActivity());
-            //此方法为每隔固定时间会发起一次定位请求，为了减少电量消耗或网络流量消耗，
-            //注意设置合适的定位时间的间隔，并且在合适时间调用removeUpdates()方法来取消定位请求
-            //在定位结束后，在合适的生命周期调用destroy()方法     
-            //其中如果间隔时间为-1，则定位只定一次
-            mLocationManagerProxy.requestLocationData(LocationProviderProxy.AMapNetwork, -1, 15, new AMapLocationListener(){
+           
+        	
+            locationClient = new AMapLocationClient(this.cordova.getActivity().getApplicationContext());
+            locationOption = new AMapLocationClientOption();
+           
+            Log.i("Asdsadsad", args.getJSONArray(0).toString());
+            int mode = args.getJSONArray(0).getInt(1);
+            Log.i("Asdsadsad", args.toString());
+            switch(mode) {
+                case 1:
+                    locationOption.setLocationMode(AMapLocationMode.Battery_Saving);
+                    break;
+                case 2:
+                    locationOption.setLocationMode(AMapLocationMode.Device_Sensors);
+                    break;
+                case 3:
+                    locationOption.setLocationMode(AMapLocationMode.Hight_Accuracy);
+                    break;
+                
+            }
+            
+            locationOption.setOnceLocation(args.getJSONArray(0).getBoolean(0));
+            
+            locationClient.setLocationOption(locationOption);
+            locationClient.startLocation();
+            AMapLocationListener a = new AMapLocationListener(){
+                
                 @Override
                 public void onLocationChanged(com.amap.api.location.AMapLocation amapLocation) {
-                    if(amapLocation != null && amapLocation.getAMapException().getErrorCode() == 0){
-                        //获取位置信息
+                    if(amapLocation != null && amapLocation.getErrorCode() == 0){
+                    	Log.i("ddddd", amapLocation.toStr());
                         Double geoLat = amapLocation.getLatitude();
                         Double geoLng = amapLocation.getLongitude();
                         JSONObject jsonObj = new JSONObject();
@@ -57,13 +84,13 @@ public class AMapLocation extends CordovaPlugin {
                         callbackContext.success(jsonObj);
                     }else{
                         if(amapLocation != null){
-                            callbackContext.error(amapLocation.getAMapException().getErrorCode()+"");
+                            callbackContext.error(amapLocation.getErrorCode()+"");
                         }else{
                             callbackContext.error("failed");
                         }
                     }
                 }
-                
+                /*
                 @Override
                 public void onLocationChanged(Location location) {
                     ;
@@ -83,7 +110,13 @@ public class AMapLocation extends CordovaPlugin {
                 public void onStatusChanged(String provider, int status, Bundle extras) {
                     ;
                 }
-            });
+                */
+
+				
+            };
+            
+            locationClient.setLocationListener(a);
+            
             return true;
         }else if (START_ACTION.equals(action)){
             if(args.length() > 0){

@@ -114,8 +114,8 @@ angular.module('starter.controllers', ["ngCookies"])
     });
   */
   window.amapLocation &&
-  window.amapLocation.getCurrentPosition(function(result){
-    console.info("sucess"+result.coords.latitude);
+  window.amapLocation.getCurrentPosition([true, 1], function(result){
+    //console.info("sucess"+result.coords.latitude);
     var point = new AMap.LngLat(result.longitude,result.latitude);
     $scope.map.setCenter(point);
     var marker = new AMap.Marker({
