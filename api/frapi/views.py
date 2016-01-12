@@ -146,3 +146,34 @@ def api_data(request):
         #return render(request, "mytest.html", {"form":form})
     form = MyForm()
     return render(request, "mytest.html", {"form":form})
+ 
+from django.contrib.auth import authenticate, login
+from django.views.decorators.http import require_http_methods
+from django.contrib.auth.decorators import login_required
+import json
+
+@require_http_methods(["POST",])
+def api_auth(request):
+    username = request.POST['username']
+    password = request.POST['password']
+    user = authenticate(username=username, password=password)
+    if user is not None:
+        if user.is_active:
+            login(request, user)
+            # Redirect to a success page.
+            
+            return HttpResponse(json.dumps({"success":True}), content_type="application/json")  
+        else:
+            # Return a 'disabled account' error message
+    else:
+        return HttpResponse(json.dumps({"success":False}), content_type="application/json")  
+        # Return an 'invalid login' error message.
+
+    
+@login_required
+@require_http_methods(["POST",])
+def api_pos(request):
+    pass
+    request.user
+    
+        

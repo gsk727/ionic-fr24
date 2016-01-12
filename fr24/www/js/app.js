@@ -47,7 +47,8 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', "
       // org.apache.cordova.statusbar required
       StatusBar.styleDefault();
     }
-    if(window.plugins.jPushPlugin) {
+    
+    if(window.plugins && window.plugins.jPushPlugin) {
       window.plugins.jPushPlugin.init();
       window.plugins.jPushPlugin.setDebugMode(true);
       //document.addEventListener("jpush.setTagsWithAlias", onTagsWithAlias, false);
@@ -85,9 +86,8 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', "
   // Each state's controller can be found in controllers.js
   $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
   $httpProvider.defaults.xsrfCookieName = 'csrftoken';
+  
   $stateProvider
-
-  // setup an abstract state for the tabs directive
     .state('tab', {
     url: '/tab',
     abstract: true,
@@ -143,8 +143,24 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', "
       }
     }
   });
+  
 
+  
+  $stateProvider
+  .state("user", {
+    abstract: true,
+    url: '/user',
+    templateUrl: 'templates/user.html'
+  })
+  .state('user.login', {
+    url: '/login',
+    views:{
+    'user-login': {
+      templateUrl: 'templates/login.html',
+      controller: 'UserCtrl'
+    }}
+  });
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/tab/dash');
+  $urlRouterProvider.otherwise('/user/login');
 
 });

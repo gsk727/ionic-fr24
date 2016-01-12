@@ -1,6 +1,8 @@
 
 angular.module('starter.controllers', ["ngCookies"])
-
+.controller('UserCtrl', function($scope, FR24, $cookies,$rootScope, $timeout) {
+  console.info("Asdasda");
+})
 .controller('DashCtrl', function($scope, FR24, $cookies,$rootScope, $timeout) {
   
   //$scope.flights = [];
@@ -114,7 +116,7 @@ angular.module('starter.controllers', ["ngCookies"])
     });
   */
   window.amapLocation &&
-  window.amapLocation.getCurrentPosition([true, 1], function(result){
+  window.amapLocation.getCurrentPosition([false, 1], function(result){
     //console.info("sucess"+result.coords.latitude);
     var point = new AMap.LngLat(result.longitude,result.latitude);
     $scope.map.setCenter(point);
@@ -160,9 +162,6 @@ angular.module('starter.controllers', ["ngCookies"])
     //if(e.overlay) {
     $state.go("tab.detail", {"pos":e.lnglat.toString()});
     //}
-    
-    
-    
     return;
     //e.overlay.remove();
     var marker = new BMap.Marker(e.point);
