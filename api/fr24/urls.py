@@ -20,4 +20,6 @@ urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^api/data$', "frapi.views.api_data"),
     url(r'^api/csrf$', "frapi.views.api_csrf"),
+    url(r'^user/login$', "frapi.views.api_auth"),
+    
 ]

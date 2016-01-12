@@ -69,6 +69,13 @@ angular.module('starter.services', ['ngResource', "ngCookies"])
   }
   
 })
+.factory("UserService", function($resource){
+  var userLogined = false;
+  return {
+    "login":$resource("http://localhost:8000/user/login")
+    
+  }
+})
 
 .factory('Chats', function() {
   // Might use a resource here that returns a JSON array

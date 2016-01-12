@@ -1,0 +1,32 @@
+<ion-view view-title="注册">
+  <ion-content class="padding">
+  
+  <form name="userRegisterForm" ng-submit="submitUserLoginForm(userRegisterForm.$valid)" novalidate>
+    <div class="list">
+      <label class="item item-input item-floating-label">
+        <span class="input-label">用户名</span>
+        <input type="text" placeholder="用户名" ng-model="userInfo.username" ng-minlength="1" ng-required="true">
+        <p ng-show="userRegisterForm.username.$error.minlength">请输入用户名</p>
+      </label>
+      <label class="item item-input item-floating-label">
+        <span class="input-label">密码</span>
+        <input type="password" placeholder="密码" ng-model="userInfo.password" ng-minlength="6" ng-required="true">
+        <p ng-show="userRegisterForm.password.$error.minlength">密码太短</p>
+      </label>
+      
+      <label class="item item-input item-floating-label">
+        <span class="input-label">密码</span>
+        <input type="password" placeholder="密码" ng-model="userInfo.repassword" ng-minlength="6" ng-required="true">
+        <p ng-show="userRegisterForm.repassword.$error.minlength">密码太短</p>
+        <p ng-show="userInfo.password!=userInfo.repassword">密码不一致</p>
+      </label>
+      <button type="submit" class="btn btn-primary" ng-disabled="userRegisterForm.$invalid">注册</button>
+
+    </div>
+  </form>
+  </ion-content>
+</ion-view>
+
+
+
+

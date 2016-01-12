@@ -1,7 +1,23 @@
 
 angular.module('starter.controllers', ["ngCookies"])
-.controller('UserCtrl', function($scope, FR24, $cookies,$rootScope, $timeout) {
+.controller('UserCtrl', function($scope, FR24, $cookies,$rootScope, $timeout, UserService) {
   console.info("Asdasda");
+  $scope.userInfo = {};
+  $scope.userInfo.username = "123";
+  $scope.userInfo.password = "123456";
+  $scope.submitUserLoginForm =function(valid) {
+    console.info($scope.userInfo);
+    UserService.login.save($scope.userInfo);
+    
+  }
+  
+})
+.controller("UserRegisterCtrl", function($scope, UserService, $timeout, $rootScope){
+  $scope.userInfo = {};
+  $scope.submitUserRegisterForm =function(valid) {
+    UserService.register.save($scope.userInfo);
+  }
+  
 })
 .controller('DashCtrl', function($scope, FR24, $cookies,$rootScope, $timeout) {
   

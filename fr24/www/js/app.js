@@ -150,13 +150,21 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', "
   .state("user", {
     abstract: true,
     url: '/user',
-    templateUrl: 'templates/user.html'
+    templateUrl: 'templates/user/user.html'
+  })
+  .state('user.register', {
+    url: '/register',
+    views:{
+    'user-register': {
+      templateUrl: 'templates/user/register.html',
+      controller: 'UserRegisterCtrl'
+    }}
   })
   .state('user.login', {
     url: '/login',
     views:{
     'user-login': {
-      templateUrl: 'templates/login.html',
+      templateUrl: 'templates/user/login.html',
       controller: 'UserCtrl'
     }}
   });

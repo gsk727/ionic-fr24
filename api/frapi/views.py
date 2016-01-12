@@ -154,8 +154,11 @@ import json
 
 @require_http_methods(["POST",])
 def api_auth(request):
-    username = request.POST['username']
-    password = request.POST['password']
+    data = json.loads(request.body)
+
+    print data
+    username = data.get('username')
+    password = data.get('password')
     user = authenticate(username=username, password=password)
     if user is not None:
         if user.is_active:
@@ -164,6 +167,7 @@ def api_auth(request):
             
             return HttpResponse(json.dumps({"success":True}), content_type="application/json")  
         else:
+            pass
             # Return a 'disabled account' error message
     else:
         return HttpResponse(json.dumps({"success":False}), content_type="application/json")  
