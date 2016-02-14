@@ -14,12 +14,33 @@ class UserProfile(models.Model):
     pos_lng = models.FloatField(null=True, blank=False)
     pos_lat = models.FloatField(null=True, blank=False)
 
-def handler_user_save(sender, instance, **kwargs):
+def handler_user_save(sender, instance, created, **kwargs):
     #pass
-    u = UserProfile(user=instance)
-    u.save()
+    if created:
+        print instance,"post"
+        u = UserProfile(user=instance)
+        u.save()
     
     
+class UserRegisterForm(forms.Form):
+    username = forms.CharField(min_length=3, max_length=20)
+    password = forms.CharField(min_length=6, max_length=32)
+    
+    def save(self):
+        user, created = User.objects.get_or_create(username=self.cleaned_data["username"])
+        if not created:
+            return False
+        
+        #user = User(username=self.cleaned_data["username"])
+        
+        print user,"-----"
+        user.set_password(self.cleaned_data["password"])
+        user.save()
+        return True
+        
+        
+    
+
 models.signals.post_save.connect(handler_user_save, sender=User)
     
     

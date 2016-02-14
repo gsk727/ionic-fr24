@@ -1,5 +1,22 @@
-<ion-view view-title="Dashboard">
+<ion-view view-title="数据">
   <ion-content class="padding">
+    <div class="list card">
+      <div class="item item-divider">数据</div>
+      <div class="item item-body">
+        <div>
+          飞机数据显示
+        </div>
+      </div>
+    </div>
+    <div class="list card">
+      <div class="item item-divider">说明</div>
+      <div class="item item-body">
+        <div>
+          飞机数据如下
+        </div>
+      </div>
+    </div>
+    
     
     <div class="list card" ng-repeat="flight in flights">
       <div class="item item-divider">{{flight.fltno}}</div>
@@ -10,21 +27,6 @@
         </div>
       </div>
     </div>
-    <div class="list card">
-      <div class="item item-divider">Health</div>
-      <div class="item item-body">
-        <div>
-          You ate an apple today!
-        </div>
-      </div>
-    </div>
-    <div class="list card">
-      <div class="item item-divider">Upcoming</div>
-      <div class="item item-body">
-        <div>
-          You have <b>29</b> meetings on your calendar tomorrow.
-        </div>
-      </div>
-    </div>
+    
   </ion-content>
 </ion-view>

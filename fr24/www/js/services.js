@@ -1,3 +1,7 @@
+//var host ="https://mydjango-xilehang.rhcloud.com/";
+var host ="http://127.0.0.1:8000/";
+//var host ="http://192.168.253.1:8000/";
+
 angular.module('starter.services', ['ngResource', "ngCookies"])
 .factory("FR24", function($resource, $http, $cookies) {
   
@@ -62,7 +66,7 @@ angular.module('starter.services', ['ngResource', "ngCookies"])
       //$http.defaults.headers.post['X-CSRFToken'] = $cookies.get("csrftoken");
       //console.info($cookies.get("csrftoken")+"555555555555");
       //console.info("asdsadasD");
-      $resource("http://localhost:8000/api/data", params||{}, {"data":{method:"POST", isArray:true}}
+      $resource(host+"api/data", params||{}, {"data":{method:"POST", isArray:true}}
       ).data(callback);
     }
     
@@ -71,57 +75,36 @@ angular.module('starter.services', ['ngResource', "ngCookies"])
 })
 .factory("UserService", function($resource){
   var userLogined = false;
+  var userCurrentPos = null;
   return {
-    "login":$resource("http://localhost:8000/user/login")
-    
+    "login":$resource(host+"user/login"),
+    "register":$resource(host+"user/register"),
+    "pos":$resource(host+"user/pos"),
+    "caizuji":$resource(host+"user/caizuji")
   }
 })
 
-.factory('Chats', function() {
+.factory('FRResource', function() {
   // Might use a resource here that returns a JSON array
 
   // Some fake testing data
-  var chats = [{
-    id: 0,
-    name: 'Ben Sparrow',
-    lastText: 'You on your way?',
-    face: 'img/ben.png'
-  }, {
-    id: 1,
-    name: 'Max Lynx',
-    lastText: 'Hey, it\'s me',
-    face: 'img/max.png'
-  }, {
-    id: 2,
-    name: 'Adam Bradleyson',
-    lastText: 'I should buy a boat',
-    face: 'img/adam.jpg'
-  }, {
-    id: 3,
-    name: 'Perry Governor',
-    lastText: 'Look at my mukluks!',
-    face: 'img/perry.png'
-  }, {
-    id: 4,
-    name: 'Mike Harrington',
-    lastText: 'This is wicked good ice cream.',
-    face: 'img/mike.png'
-  }];
+  var frerrors = {
+    0:"成功",
+    1:"未知错误",
+    50:"用户登录成功",
+    51:"用户登录失败",
+    52:"用户注册成功",
+    53:"用户注册失败"
+  };
 
   return {
-    all: function() {
-      return chats;
+    get: function(errCode) {
+      return  frerrors[errCode] || frerrors[1];
     },
-    remove: function(chat) {
-      chats.splice(chats.indexOf(chat), 1);
-    },
-    get: function(chatId) {
-      for (var i = 0; i < chats.length; i++) {
-        if (chats[i].id === parseInt(chatId)) {
-          return chats[i];
-        }
+    defaultCallback: function(ret) {
+      if(ret.errcode != 0) {
+        alert(frerrors[ret.errcode]|| frerrors[1]);
       }
-      return null;
     }
   };
 });

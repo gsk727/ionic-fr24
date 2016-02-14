@@ -77,16 +77,27 @@ public class AMapLocation extends CordovaPlugin {
                         try {
                             jsonObj.put("latitude", geoLat);
                             jsonObj.put("longitude", geoLng);
+                            
                         } catch (JSONException e) {
             				callbackContext.error(e.getMessage());
             				return;
             			}
-                        callbackContext.success(jsonObj);
+                        PluginResult result = new PluginResult(PluginResult.Status.OK, jsonObj);
+                        result.setKeepCallback(true);
+                        callbackContext.sendPluginResult(result);
+                        //callbackContext.success(jsonObj);
                     }else{
-                        if(amapLocation != null){
-                            callbackContext.error(amapLocation.getErrorCode()+"");
+                        if(amapLocation != null) {
+                            PluginResult result1 = new PluginResult(PluginResult.Status.ERROR, amapLocation.getErrorCode()+"");
+                            result1.setKeepCallback(true);
+                            callbackContext.sendPluginResult(result1);
+                        
+                            //callbackContext.error(amapLocation.getErrorCode()+"");
                         }else{
-                            callbackContext.error("failed");
+                            PluginResult result2 = new PluginResult(PluginResult.Status.ERROR, "failed");
+                            result2.setKeepCallback(true);
+                            callbackContext.sendPluginResult(result2);
+                            //callbackContext.error("failed");
                         }
                     }
                 }

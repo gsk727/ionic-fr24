@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.core.context_processors import csrf
 from django.views.decorators.csrf import csrf_protect,ensure_csrf_cookie
-from .models import MyForm
+from .models import MyForm, UserRegisterForm
 import requests
 import datetime
 import traceback
@@ -161,6 +161,7 @@ def api_auth(request):
     password = data.get('password')
     user = authenticate(username=username, password=password)
     if user is not None:
+        print user
         if user.is_active:
             login(request, user)
             # Redirect to a success page.
@@ -174,10 +175,22 @@ def api_auth(request):
         # Return an 'invalid login' error message.
 
     
+@require_http_methods(["POST",])
+def api_register(request):
+    data = json.loads(request.body)
+
+    print data
+    username = data.get('username')
+    password = data.get('password')
+    form = UserRegisterForm(data=data)
+    if form.is_valid() and form.save():
+        return HttpResponse(json.dumps({"success":True}), content_type="application/json")  
+       
+    return HttpResponse(json.dumps({"success":False}), content_type="application/json")  
+
 @login_required
 @require_http_methods(["POST",])
 def api_pos(request):
-    pass
     request.user
     
         

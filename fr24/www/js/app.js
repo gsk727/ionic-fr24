@@ -7,16 +7,30 @@
 // 'starter.controllers' is found in controllers.js
 angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', "ngCookies"])
 
-.run(function($ionicPlatform, $http, $cookies, FR24) {
+.run(function($ionicPlatform, $http, $cookies, FR24, $rootScope, $ionicLoading) {
+  $rootScope.showLoading = function(text) {
+    
+    $ionicLoading.show({
+      template: text||'加载数据中...'
+    });
+  };
+  $rootScope.hideLoading = function(){
+    $ionicLoading.hide();
+  };
   console.info("run:"+ $cookies.csrftoken);
-  
-  $http.get("http://localhost:8000/api/csrf", {}).success(function() {
+  /*
+  $http.get("https://mydjango-xilehang.rhcloud.com/api/csrf", {}).success(function() {
     $http.defaults.headers.post['X-CSRFToken'] = $cookies.get("csrftoken");
     console.info("get csrf:"+$cookies.get("csrftoken"));
     FR24.bcsrf = true;
   });
+  */
+   
+    /*  Open a websocket to the host.  */
+    
+
   
- 
+  
   $ionicPlatform.ready(function() {
   
   
@@ -128,7 +142,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', "
   .state("tab.detail", {
     url: '/detail/:pos',
     views: {
-      'tab-detail': {
+      'tab-chats': {
         templateUrl: 'templates/tab-pos.html',
         controller: 'PosDetailCtrl'
       }
@@ -155,7 +169,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', "
   .state('user.register', {
     url: '/register',
     views:{
-    'user-register': {
+    'user-view': {
       templateUrl: 'templates/user/register.html',
       controller: 'UserRegisterCtrl'
     }}
@@ -163,7 +177,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', "
   .state('user.login', {
     url: '/login',
     views:{
-    'user-login': {
+    'user-view': {
       templateUrl: 'templates/user/login.html',
       controller: 'UserCtrl'
     }}

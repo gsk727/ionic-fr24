@@ -28,12 +28,12 @@
 			</config-file>
 			<config-file parent="/manifest/application" target="AndroidManifest.xml">
 				<meta-data android:name="com.amap.api.v2.apikey" android:value="d958a0674a5b237c4108ed2be42bd561" />
-				<service android:name="com.mobishift.cordova.plugins.amaplocation.LocationService" />
+				<service android:name="com.amap.api.location.APSService"></service>
 			</config-file>
 			<source-file src="src/android/AMapLocation.java" target-dir="src/com/mobishift/cordova/plugins/amaplocation" />
 			<source-file src="src/android/LocationService.java" target-dir="src/com/mobishift/cordova/plugins/amaplocation" />
 			<source-file src="src/android/LocationPreferences.java" target-dir="src/com/mobishift/cordova/plugins/amaplocation" />
-			<source-file framework="true" src="src/android/Android_Location_V1.3.1.jar" target-dir="libs" />
+			<source-file framework="true" src="src/android/AMap_Location_v2.3.0_20160112.jar" target-dir="libs" />
 		</platform>
 		<platform name="ios">
 			<config-file parent="/*" target="config.xml">

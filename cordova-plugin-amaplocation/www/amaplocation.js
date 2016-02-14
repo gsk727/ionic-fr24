@@ -12,8 +12,8 @@ window.locationService = {
 			[params]
 		)
 	},
-	getCurrentPosition: function(successCallback, errorCallback) {
-		this.execute("getCurrentPosition", {}, successCallback, errorCallback);
+	getCurrentPosition: function(opt, successCallback, errorCallback) {
+		this.execute("getCurrentPosition", opt, successCallback, errorCallback);
 	},
 	start: function(callback, errorCallback, options){
 		callback = callback || noop;

@@ -1,11 +1,43 @@
-<ion-view view-title="Chats">
+<ion-view view-title="地图">
   <ion-content>
     <div>
     <!--<lbs-geo city="北京" enable-modified="false" show-ui="true"></lbs-geo>-->
     </div>
+    <div style="height:100%">
+      <div id="container" style="height:100%">
+      </div>
+      
+      <div class="card" ng-show="regeocode_show" style="position:absolute;bottom:0px;width:100%;">
+        <div class="item item-divider">
+          {{regeocode.addressComponent.building}}
+        </div>
+        <div class="item item-text-wrap">
+          {{regeocode.formattedAddress}}
+        </div>
+        <div class="item item-divider">
+          <div class="button-bar bar-stable">
+            <a class="button" ng-click="caiZuJi()">留下足迹</a>
+            <a class="button">大家足迹</a>
+            <a class="button">评论</a>
+          </div>
+      </div>
     
-    <div id="container" style="height:100%"></div>
-    
+      <!--
+      <ion-list  ng-show="regeocode_show" style="position:relative;bottom:0px;width:100%;">
+        
+        
+        <ion-item  ng-model="pos_address"  type="item-text-wrap">
+          
+          <span class ="bar bar-header bar-stable">{{regeocode.addressComponent.building}}</span>
+          <span class ="bar bar-header bar-stable">{{regeocode.formattedAddress}}</span>
+        </ion-item>
+        <ion-item ng-model="pos_address" type="item-text-wrap">
+          hhhhhhhhhhhhhhhh
+        </ion-item>
+      </ion-list>
+      -->
+    </div>
+   
   </ion-content>
 </ion-view>
 
