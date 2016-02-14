@@ -1,0 +1,54 @@
+<?xml version='1.0' encoding='utf-8'?>
+	<plugin id="com.mytest.cordova.plugins.mywebsocket" version="0.2.2" xmlns="http://www.phonegap.com/ns/plugins/1.0">
+		<name>MyWebSocket</name>
+		<description>AMap Location Plugin for Phonegap</description>
+		<license>MIT</license>
+		<keywords>amap, location, cordova</keywords>
+		<js-module name="MyWebSocket" src="www/mywebsocket.js">
+			<clobbers target="window.mywebsocket" />
+		</js-module>
+		<platform name="android">
+			<hook src="hook/before_android_install.js" type="before_plugin_install"/>
+			<hook src="hook/before_android_uninstall.js" type="before_plugin_uninstall"/>
+			<config-file parent="/*" target="res/xml/config.xml">
+				<feature name="MyWebSocket">
+					<param name="android-package" value="com.mytest.cordova.plugins.amaplocation.WebSocket" />
+				</feature>
+			</config-file>
+			<config-file parent="/*" target="AndroidManifest.xml">
+				<uses-permission android:name="android.permission.INTERNET" />
+				<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+				<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+				<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+				<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+				<uses-permission android:name="android.permission.READ_PHONE_STATE" />
+				<uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+				<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+				<uses-permission android:name="android.permission.CHANGE_CONFIGURATION" />
+			</config-file>
+			<config-file parent="/manifest/application" target="AndroidManifest.xml">
+				
+			</config-file>
+			<source-file src="src/android/MyWebSocket.java" target-dir="src/com/mytest/cordova/plugins/mywebsocket" />
+			
+			<source-file framework="true" src="src/android/androidasync-2.1.6.jar" target-dir="libs" />
+		</platform>
+        <!--
+		<platform name="ios">
+			<config-file parent="/*" target="config.xml">
+				<feature name="AMapLocation">
+					<param name="ios-package" value="AMapLocation" />
+				</feature>
+			</config-file>
+			<config-file target="*/*-Info.plist" parent="UIBackgroundModes">
+				<array>
+					<string>location</string>
+				</array>
+			</config-file>
+			<config-file target="*/*-Info.plist" parent="NSLocationAlwaysUsageDescription">
+				<string>为了确保在您自己的停车场正确使用本应用，请选择允许</string>
+			</config-file>
+			<source-file src="src/ios/AMapLocation.m" />
+		</platform>
+        -->
+	</plugin>
