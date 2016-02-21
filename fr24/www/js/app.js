@@ -129,6 +129,15 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', "
         }
       }
     })
+    .state("tab.chats-comment", {
+      url:'/chats/comment',
+      views:{
+        "tab-chats":{
+          templateUrl:"templates/tab-chats-comment.html",
+          controller: 'ChatsCommentCtrl'
+        }
+      }
+    })
     .state('tab.chat-detail', {
       url: '/chats/:chatId',
       views: {

@@ -42,6 +42,10 @@ angular.module('starter.controllers', ["ngCookies"])
         return;
       }
       $http.defaults.headers.post['AUTHTOKEN'] = ret.token;
+      $http.defaults.headers.common['AUTHTOKEN']= ret.token;
+      UserService.setToken(ret.token);
+      //$http.defaults.headers.get['AUTHTOKEN'] = ret.token;
+      $rootScope.token = ret.token;
       console.info(ret.token);
       $scope.initWebSocket(ret.token);
       FR24.bcsrf = true;
@@ -105,6 +109,20 @@ angular.module('starter.controllers', ["ngCookies"])
     $scope.hide();
   });
 })
+.controller("ChatsCommentCtrl", function($scope, UserService,$ionicHistory) {
+  console.info( UserService.clickPos );
+  //$http.defaults.headers.post['AUTHTOKEN'] = ret.token;
+  
+  $scope.getSubject = function(){
+    
+    UserService.comment_get().then(function(data){}, function(reason) {console.info(reason);});
+  }
+  
+  $scope.getSubject();
+  $scope.myGoBack = function() {
+    $ionicHistory.goBack();
+  };
+})
 .controller('ChatsCtrl', function($scope, $interval,$timeout, UserService, $ionicActionSheet, $window, FR24, $rootScope, $state) {
   
   $scope.caiZuJi = function() {
@@ -118,6 +136,18 @@ angular.module('starter.controllers', ["ngCookies"])
       alert("踩到了啊"); 
     }
   };
+  
+  $scope.goToComment = function() {
+    /*
+    $scope.regeocode
+    $scope.regeocode_show;
+    UserService.clickPos 
+    $scope.pos_address 
+    $scope.location_info
+    */
+    
+    $state.go("tab.chats-comment");
+  }
   
   $rootScope.flights = [];
   function addMarker() {

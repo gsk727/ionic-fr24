@@ -73,15 +73,42 @@ angular.module('starter.services', ['ngResource', "ngCookies"])
   }
   
 })
-.factory("UserService", function($resource){
-  var userLogined = false;
-  var userCurrentPos = null;
-  return {
-    "login":$resource(host+"user/login"),
-    "register":$resource(host+"user/register"),
-    "pos":$resource(host+"user/pos"),
-    "caizuji":$resource(host+"user/caizuji")
+.service("UserService", function($resource, $q){
+  this.userLogined = false;
+  this.userCurrentPos = null;
+  this.token = "";
+ 
+  this.getToken = function() {
+    console.info("=================");
+    return this.token;
   }
+ 
+  this.comment_get = function() {
+    var deferred = $q.defer();
+    if(!this.comment) {
+        setTimeout(function(){deferred.reject("error: not set token;");}, 0);
+        return deferred.promise;
+    }
+    this.comment.get({"lng":this.clickPos.lng, "lat":this.clickPos.lat}, function(data){deferred.resolve(data);}, function(error) {
+        deferred.reject("error;")
+    });
+    return deferred.promise;
+  }
+  
+  this.setToken  = function(token) {
+    this.token = token;
+    this.comment = $resource(host+"user/comment", {}, {
+    get:{
+        method:"GET",
+        headers:{"AUTHTOKEN": token, "adsad":"1221"}
+    }});
+  }
+  this.login = $resource(host+"user/login");
+  this.register = $resource(host+"user/register");
+  this.pos = $resource(host+"user/pos");
+  this.caizuji = $resource(host+"user/caizuji");
+  
+ ;
 })
 
 .factory('FRResource', function() {
